@@ -8,7 +8,8 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class SettingsPage extends BasePage {
 
-    public SettingsPage() {
+    public SettingsPage(DriverProvider driverProvider) {
+        super(driverProvider);
         PageFactory.initElements(getDriver(),this);
     }
 }

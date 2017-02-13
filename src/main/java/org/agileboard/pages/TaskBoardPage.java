@@ -17,34 +17,35 @@ import static org.agileboard.pages.Locators.StagePagesLocators.*;
 public class TaskBoardPage extends BasePage {
 
 
-    public TaskBoardPage() {
+    public TaskBoardPage(DriverProvider driverProvider) {
+        super(driverProvider);
         PageFactory.initElements(getDriver(),this);
     }
 
-    public void openApp() throws InterruptedException {
-        DriverProvider.init();
-        CommonManager.waitSeconds(1);
-    }
-
     public void raiseNewTaskCreation(){
+        pageLogger.info("Raising new task creation");
         CommonManager.waitSeconds((int) 0.5);
         clickIfVisible(getElementBy(By.xpath(ADD_TASK_BUTTON)));
         CommonManager.waitSeconds((int) 1.5);
     }
 
     public void navigateToDoStage(){
+        pageLogger.info("Navigating on 'TO-DO' stage");
         clickIfVisible(getElementBy(By.xpath(TO_DO_LINK)));
     }
 
     public void navigateDoingStage(){
+        pageLogger.info("Navigating 'DOING' stage");
         clickIfVisible(getElementBy(By.xpath(DOING_LINK)));
     }
 
     public void navigateDoneStage(){
+        pageLogger.info("Navigating 'DONE' stage");
         clickIfVisible(getElementBy(By.xpath(DONE_LINK)));
     }
 
     public void moveTaskToState(String taskName,String stateColumn){
+        pageLogger.info("Move task "+taskName+" to state: "+stateColumn);
         WebElement destElement=null;
         switch(stateColumn){
             case "Do": destElement=getElementBy(By.xpath(TO_DO_LINK)); break;
@@ -55,10 +56,12 @@ public class TaskBoardPage extends BasePage {
     }
 
     public void moveToPrevOrNextState(String taskName,String direction){
+        pageLogger.info("Moving task "+taskName+"to direction: "+direction);
         swipeToElementExp(getElementBy(By.xpath(String.format(TASK_BY_NAME, taskName))), direction);
     }
 
     public void deleteTask(String taskName){
+        pageLogger.info("Deleting task "+taskName);
         CommonManager.waitSeconds(1);
         WebElement task=getElementBy(By.xpath(String.format(TASK_BY_NAME, taskName)));
         touchTillContextEvent(task);
@@ -67,7 +70,7 @@ public class TaskBoardPage extends BasePage {
     }
 
     public void assertTaskIsCreated(String name){
-
+        pageLogger.info("Verifying task "+name+" to be created");
         Assert.assertTrue(webElementIsEnabled(getElementBy(By.xpath(String.format(TASK_BY_NAME,name)))));
     }
 }

@@ -18,13 +18,13 @@ public class TaskFlowSteps extends TestBase {
 
     @Given("I click add button")
     public void raiseNewTask(){
-        taskBoardPage =  new TaskBoardPage();
+        taskBoardPage =  new TaskBoardPage(driverProvider);
         taskBoardPage.raiseNewTaskCreation();
     }
 
     @When("I create task with $name and $description")
     public void createTask(@Named("name") String name,@Named("description") String description){
-        taskPage=new TaskPage();
+        taskPage=new TaskPage(driverProvider);
         taskPage.fillNewTask(name, description);
         taskPage.completeTaskCreation();
     }
@@ -32,8 +32,6 @@ public class TaskFlowSteps extends TestBase {
     @Then("Task with $name is created")
     public void checkTaskIsCreated(@Named("name")String name){
         taskBoardPage.assertTaskIsCreated(name);
-        //taskBoardPage.endApp();
-
     }
 
 

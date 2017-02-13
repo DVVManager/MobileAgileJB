@@ -13,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,30 +24,25 @@ import java.util.List;
  */
 public class BasePage {
 
-    private Logger pageLogger = Logger.getLogger(BasePage.class);
+    protected Logger pageLogger = Logger.getLogger(BasePage.class);
 
-    /*@Autowired
-    private DriverProvider driverProvider;*/
+    private DriverProvider provider;
 
-    public BasePage() {
-        PageFactory.initElements(DriverProvider.getDriver(), this);
+    public BasePage(DriverProvider  driverProvider) {
+        provider=driverProvider;
+        PageFactory.initElements(getDriver(), this);
     }
 
-   /* public DriverProvider getProvider() {
-        return driverProvider;
-    }*/
     protected AndroidDriver getDriver() {
-        return DriverProvider.getDriver();
+        return provider.getDriver();
     }
     protected WebDriverWait getWaitDriver(){
-        return DriverProvider.getWaitDriver();
-    }
-    public void endApp(){
-        DriverProvider.end();
+        return provider.getWaitDriver();
     }
 
     //common selenium wrapped methods
     protected void clearAndType(WebElement inputElement, String inputText) {
+        pageLogger.info("Typing text "+inputText+" to field "+inputElement.getTagName()+inputElement.getText());
         inputElement.clear();
         CommonManager.waitSeconds(1);
         inputElement.sendKeys(inputText);
@@ -54,6 +50,7 @@ public class BasePage {
     }
 
     protected void clearFieldNonJS(WebElement element) {
+        pageLogger.info("Cleaning field "+ element.getTagName()+ element.getText()+" with JS");
         element.sendKeys(Keys.CONTROL + "A" + Keys.DELETE);
     }
 
@@ -67,17 +64,21 @@ public class BasePage {
     }
 
     protected void clickIfVisible(WebElement element) {
+        pageLogger.info("Click element "+element.getTagName()+element.getText()+" if visible");
         getWaitDriver().until(ExpectedConditions.visibilityOf(element));
         element.click();
     }
 
     protected void clickWithJS(WebElement element){
+
+        pageLogger.info("Click "+element.getTagName()+element.getText());
         getWaitDriver().until(ExpectedConditions.visibilityOf(element));
         executeJSCommand("arguments[0].click();", element);
 
     }
 
     protected boolean webElementIsEnabled(WebElement element) {
+        pageLogger.info("Verifying element "+element.getTagName()+element.getText()+" to be enabled");
         return element.isEnabled();
     }
 
@@ -139,6 +140,8 @@ public class BasePage {
     }
 
     protected void executeJSCommand(String command,WebElement element) {
+
+        pageLogger.info("Executing command [ "+command+" ] with JS");
         JavascriptExecutor javascript = (JavascriptExecutor) getDriver();
         javascript.executeScript(command, element);
     }
@@ -184,6 +187,8 @@ public class BasePage {
     }
 
     protected void swipeToElement(WebElement startEl,WebElement destEl){
+
+        pageLogger.info("Swiping element");
         TouchAction action = new TouchAction(getDriver());
         int xOrd=startEl.getLocation().getX();
         int yOrd=startEl.getLocation().getY();
@@ -200,6 +205,7 @@ public class BasePage {
 
 
     protected void swipeToElementExp(WebElement slideEl,String side){
+        pageLogger.info("Swiping element to "+side);
         int width=getDriver().manage().window().getSize().getWidth();
         int leftEdge= (int) (width*0.015);
         int rightEdge= (int) (width*0.85);
@@ -216,6 +222,7 @@ public class BasePage {
     }
 
     protected void touchTillContextEvent(WebElement el){
+        pageLogger.info("Executing long press");
         TouchAction action = new TouchAction(getDriver());
         action.longPress(el,3000).release().perform();
     }

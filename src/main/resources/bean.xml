@@ -9,12 +9,14 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.agileboard.steps"/>
+    <context:component-scan base-package="org.agileboard.steps.TaskFlowSteps,org.agileboard.appdriver.DriverProvider,
+    org.agileboard.appdriver.TestBase,org.agileboard.pages.*,org.agileboardstories.stories.AgileBoardStory"/>
 
     <bean id="provider" class="org.agileboard.appdriver.DriverProvider" scope="singleton">
     </bean>
 
-
+    <bean id="steps" class="org.agileboard.steps.TaskFlowSteps">
+    </bean>
 
     <!--<context:property-placeholder location="classpath:Data.properties" />-->
 
@@ -23,7 +25,5 @@
             <value>config.properties</value>
         </property>
     </bean>
-
-
 
 </beans>

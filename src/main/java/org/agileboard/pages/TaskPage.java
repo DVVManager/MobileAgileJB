@@ -14,11 +14,13 @@ import static org.agileboard.pages.Locators.TaskLocators.*;
 public class  TaskPage extends BasePage {
 
 
-    public TaskPage() {
+    public TaskPage(DriverProvider driverProvider) {
+        super(driverProvider);
         PageFactory.initElements(getDriver(),this);
     }
 
     public void  fillNewTask(String taskName,String descr){
+        pageLogger.info("Setting task name: "+taskName+" and description: "+descr);
         fillNewTaskName(taskName);
         fillNewTaskDescr(descr);
     }
@@ -36,6 +38,7 @@ public class  TaskPage extends BasePage {
     }
 
     public void completeTaskCreation(){
+        pageLogger.info("Completing task creation");
         clickIfVisible(getElementBy(By.xpath(DONE_BUTTON)));
         CommonManager.waitSeconds(1);
     }

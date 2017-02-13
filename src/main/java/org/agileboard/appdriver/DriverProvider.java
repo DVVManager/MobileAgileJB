@@ -5,9 +5,6 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import org.agileboard.common.CommonManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterScenario;
-import org.jbehave.core.annotations.BeforeScenario;
-import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,13 +19,13 @@ import java.net.URL;
  */
 
 public class DriverProvider {
-    private static Logger logger = Logger.getLogger(DriverProvider.class);
+    private  Logger logger = Logger.getLogger(DriverProvider.class);
 
-    private static AndroidDriver driver;
-    private static WebDriverWait wait;
-    private static DesiredCapabilities caps;
+    private  AndroidDriver driver;
+    private  WebDriverWait wait;
+    private  DesiredCapabilities caps;
 
-    public static void init(){
+    public  void init(){
         try {
             caps = DesiredCapabilities.android();
             caps.setCapability(MobileCapabilityType.APP, "D://KnowledgeCentre//KCentre//TestApks//com.sauce.agile.apk");
@@ -39,22 +36,23 @@ public class DriverProvider {
             caps.setCapability("autoAcceptAlerts", true);
             caps.setCapability("session-override", true);
             driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), caps);
-            wait= new WebDriverWait(driver,3);
+            wait= new WebDriverWait(driver,5);
+            logger.info("Initiating drivers and lounching App");
             CommonManager.waitSeconds(1);
         } catch (MalformedURLException e) {
             logger.warn(e.getMessage()+"Can't open App");
         }
     }
 
-    public static AndroidDriver getDriver() {
+    public  AndroidDriver getDriver() {
         return driver;
     }
 
-    public static WebDriverWait getWaitDriver(){
+    public  WebDriverWait getWaitDriver(){
         return wait;
     }
 
-    public static boolean saveScreenshotTo(String path) {
+    public  boolean saveScreenshotTo(String path) {
         File screen = (File) driver.getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(screen, new File(path));
@@ -64,12 +62,9 @@ public class DriverProvider {
         }
     }
 
-    public static void end() {
+    public  void end() {
+        logger.info("Closing Driver");
         driver.quit();
-        //driver.closeApp();
-        //Depricated
-        /*driver.close();
-        driver.quit();*/
     }
 
 }

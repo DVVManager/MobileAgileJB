@@ -8,7 +8,8 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class ProjectPage extends BasePage {
 
-    public ProjectPage() {
+    public ProjectPage(DriverProvider driverProvider) {
+        super(driverProvider);
         PageFactory.initElements(getDriver(),this);
     }
 }

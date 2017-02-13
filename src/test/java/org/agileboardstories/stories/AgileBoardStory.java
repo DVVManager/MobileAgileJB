@@ -20,6 +20,9 @@ import org.jbehave.core.steps.InjectableStepsFactory;
 
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.jbehave.core.steps.ParameterConverters;
+import org.jbehave.core.steps.spring.SpringApplicationContextFactory;
+import org.jbehave.core.steps.spring.SpringStepsFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -36,8 +39,6 @@ import static org.jbehave.core.io.CodeLocations.codeLocationFromPath;
 
 public class AgileBoardStory extends JUnitStories {
 
-
-
     @Override
     public Configuration configuration() {
 
@@ -49,7 +50,11 @@ public class AgileBoardStory extends JUnitStories {
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        return new InstanceStepsFactory(configuration(), new TaskFlowSteps());
+      // return new InstanceStepsFactory(configuration(), new TaskFlowSteps());
+        ApplicationContext context = new SpringApplicationContextFactory(
+                "bean.xml")
+                .createApplicationContext();
+        return new SpringStepsFactory(configuration(), context);
     }
 
     @Override
