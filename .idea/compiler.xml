@@ -25,7 +25,7 @@
         <module name="MobileAgileJB" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel>
       <module name="MobileAgileJB" target="1.7" />
     </bytecodeTargetLevel>
   </component>

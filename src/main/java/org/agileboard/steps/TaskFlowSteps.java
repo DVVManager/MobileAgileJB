@@ -34,5 +34,34 @@ public class TaskFlowSteps extends TestBase {
         taskBoardPage.assertTaskIsCreated(name);
     }
 
+    @Given("I move $task to right")
+    public void moveTaskRight(@Named("task")String name){
+        taskBoardPage.moveToPrevOrNextState(name, "right");
+    }
+
+    @Given("I move $task to left")
+    public void moveTaskLeft(@Named("task")String name){
+        taskBoardPage.moveToPrevOrNextState(name, "left");
+    }
+
+    @When("I check $task is on $state")
+    public void checkTaskIsOnState(@Named("task")String name,@Named("state")String state){
+        switch (state){
+            case "progress": taskBoardPage.navigateDoingStage();break;
+            case "done": taskBoardPage.navigateDoneStage();break;
+            default:taskBoardPage.navigateToDoStage();break;
+        }
+        taskBoardPage.assertTaskExists(name,true);
+    }
+
+    @When("I delete $task")
+    public void deleteTask(@Named("task")String name){
+        taskBoardPage.deleteTask(name);
+    }
+
+    @Then("Task with $name was deleted")
+    public void checkTaskIsDeleted(@Named("name")String name){
+             taskBoardPage.assertTaskExists(name,false);
+        }
 
 }

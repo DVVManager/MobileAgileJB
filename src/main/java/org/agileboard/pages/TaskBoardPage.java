@@ -2,6 +2,7 @@ package org.agileboard.pages;
 
 import org.agileboard.appdriver.DriverProvider;
 import org.agileboard.common.CommonManager;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -16,6 +17,8 @@ import static org.agileboard.pages.Locators.StagePagesLocators.*;
  */
 public class TaskBoardPage extends BasePage {
 
+    protected Logger logger = Logger.getLogger(TaskBoardPage.class);
+
 
     public TaskBoardPage(DriverProvider driverProvider) {
         super(driverProvider);
@@ -23,29 +26,29 @@ public class TaskBoardPage extends BasePage {
     }
 
     public void raiseNewTaskCreation(){
-        pageLogger.info("Raising new task creation");
+        logger.info("Raising new task creation");
         CommonManager.waitSeconds((int) 0.5);
         clickIfVisible(getElementBy(By.xpath(ADD_TASK_BUTTON)));
         CommonManager.waitSeconds((int) 1.5);
     }
 
     public void navigateToDoStage(){
-        pageLogger.info("Navigating on 'TO-DO' stage");
+        logger.info("Navigating on 'TO-DO' stage");
         clickIfVisible(getElementBy(By.xpath(TO_DO_LINK)));
     }
 
     public void navigateDoingStage(){
-        pageLogger.info("Navigating 'DOING' stage");
+        logger.info("Navigating 'DOING' stage");
         clickIfVisible(getElementBy(By.xpath(DOING_LINK)));
     }
 
     public void navigateDoneStage(){
-        pageLogger.info("Navigating 'DONE' stage");
+        logger.info("Navigating 'DONE' stage");
         clickIfVisible(getElementBy(By.xpath(DONE_LINK)));
     }
 
     public void moveTaskToState(String taskName,String stateColumn){
-        pageLogger.info("Move task "+taskName+" to state: "+stateColumn);
+        logger.info("Move task "+taskName+" to state: "+stateColumn);
         WebElement destElement=null;
         switch(stateColumn){
             case "Do": destElement=getElementBy(By.xpath(TO_DO_LINK)); break;
@@ -56,12 +59,12 @@ public class TaskBoardPage extends BasePage {
     }
 
     public void moveToPrevOrNextState(String taskName,String direction){
-        pageLogger.info("Moving task "+taskName+"to direction: "+direction);
+        logger.info("Moving task "+taskName+" to direction: "+direction);
         swipeToElementExp(getElementBy(By.xpath(String.format(TASK_BY_NAME, taskName))), direction);
     }
 
     public void deleteTask(String taskName){
-        pageLogger.info("Deleting task "+taskName);
+        logger.info("Deleting task "+taskName);
         CommonManager.waitSeconds(1);
         WebElement task=getElementBy(By.xpath(String.format(TASK_BY_NAME, taskName)));
         touchTillContextEvent(task);
@@ -70,7 +73,16 @@ public class TaskBoardPage extends BasePage {
     }
 
     public void assertTaskIsCreated(String name){
-        pageLogger.info("Verifying task "+name+" to be created");
-        Assert.assertTrue(webElementIsEnabled(getElementBy(By.xpath(String.format(TASK_BY_NAME,name)))));
+        pageLogger.info("Verifying task " + name + " to be created");
+        Assert.assertTrue(webElementExists(getElementBy(By.xpath(String.format(TASK_BY_NAME, name)))));
+    }
+
+    public void assertTaskExists(String name,boolean positive) {
+        pageLogger.info("Verifying task " + name + " exists");
+        if(positive) {
+            Assert.assertTrue(getElementsBy(By.xpath(String.format(TASK_BY_NAME, name))).size()>0,"Task was not found");
+        }else{
+            Assert.assertFalse((getElementsBy(By.xpath(String.format(TASK_BY_NAME, name)))).size()>0,"Task still exists");
+        }
     }
 }

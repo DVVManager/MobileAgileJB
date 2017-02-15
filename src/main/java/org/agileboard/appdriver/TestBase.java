@@ -1,7 +1,9 @@
 package org.agileboard.appdriver;
 
 import org.jbehave.core.annotations.AfterScenario;
+import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeScenario;
+import org.jbehave.core.annotations.BeforeStories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -20,11 +22,11 @@ public class TestBase {
         return this.driverProvider;
     }
 
-    @BeforeScenario
+    @BeforeStories
     public void initialization() {
         driverProvider.init();
     }
-    @AfterScenario
+    @AfterStories
     public void cleanup(){
         driverProvider.end();
     }

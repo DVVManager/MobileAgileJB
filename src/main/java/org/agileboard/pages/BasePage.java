@@ -77,9 +77,14 @@ public class BasePage {
 
     }
 
-    protected boolean webElementIsEnabled(WebElement element) {
+    protected boolean webElementExists(WebElement element) {
         pageLogger.info("Verifying element "+element.getTagName()+element.getText()+" to be enabled");
-        return element.isEnabled();
+        try{
+             return  element.isDisplayed();
+        }catch (NoSuchElementException ex){
+            pageLogger.warn("NO SUCH ELEMENT EXCEPTION");
+            return false;
+        }
     }
 
     protected void waitElementToBeClickable(String xpath) {

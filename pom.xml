@@ -13,6 +13,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.1.4.RELEASE</spring.version>
         <jbehave.core.version>4.0.5</jbehave.core.version>
+        <story_name>create_task</story_name>
+        <story_runner>AgileBoardStory</story_runner>
     </properties>
 
 
@@ -103,6 +105,11 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>4.0.0</version>
+        </dependency>
 
     </dependencies>
 
@@ -129,7 +136,7 @@
             <testResource>
                 <directory>src/test/java</directory>
                 <includes>
-                    <include>**/*.story</include>
+                    <include>**/*${story_name}.story</include>
                 </includes>
             </testResource>
         </testResources>
@@ -148,7 +155,7 @@
                         <configuration>
                             <scope>test</scope>
                             <includes>
-                                <include>**/*Story.java</include>
+                                <include>**/*${story_runner}.java</include>
                             </includes>
                             <ignoreFailureInStories>true</ignoreFailureInStories>
                             <ignoreFailureInView>false</ignoreFailureInView>
